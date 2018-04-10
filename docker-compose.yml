@@ -1,0 +1,52 @@
+version: '2.1'
+
+networks:
+  proxy:
+    external:
+      name: dockercommon_proxy
+  internal:
+
+services:
+  drupal:
+    image: drupal:7.58
+    environment:
+      VIRTUAL_HOST: friend.test
+    volumes:
+      - "./app:/var/www/html/sites/all"
+      - "./config/settings.php:/var/www/html/sites/default/settings.php"
+      - "./data/files:/var/www/html/files"
+      - "./data/private:/var/www/private"
+      - "/etc/localtime:/etc/localtime:ro"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      mailcatcher:
+        condition: service_started
+    networks:
+      - proxy
+      - internal
+
+  mariadb:
+    image: mariadb:10.2
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: drupal
+      MYSQL_PASSWORD: drupal
+      MYSQL_DATABASE: drupal7
+    volumes:
+      - "./data/database:/var/lib/mysql"
+    healthcheck:
+      test: "mysqladmin ping -u drupal -pdrupal --silent"
+    networks:
+      - internal
+
+  mailcatcher:
+    image: mailhog/mailhog
+    environment:
+      VIRTUAL_HOST: mail.friend.test
+      VIRTUAL_PORT: 8025
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - proxy
+      - internal

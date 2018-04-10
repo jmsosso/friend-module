@@ -1,0 +1,4 @@
+name = Friend module
+description = Creates the custom content type Friend.
+version = 1.0
+core = 7.x
