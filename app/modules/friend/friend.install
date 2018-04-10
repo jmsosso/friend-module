@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function friend_install() {
+  variable_set('node_options_friend', array('status'));
+  variable_set('comment_friend', COMMENT_NODE_CLOSED);
+  variable_set('node_submitted_friend', FALSE);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function friend_uninstall() {
+  variable_del('node_options_friend');
+  variable_del('comment_friend');
+  variable_del('node_submitted_friend');
+
+	// To avoid this issue https://www.drupal.org/project/drupal/issues/1565892#comment-10814226
+	node_type_cache_reset();
+	node_types_rebuild();
+
+	node_type_delete ('friend');
+}

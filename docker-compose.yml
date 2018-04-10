@@ -50,3 +50,19 @@ services:
     networks:
       - proxy
       - internal
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      VIRTUAL_HOST: phpmyadmin.friend.test
+      PMA_HOST: mariadb
+      PMA_USER: root
+      PMA_PASSWORD: root
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - proxy
+      - internal

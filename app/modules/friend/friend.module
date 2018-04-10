@@ -1,0 +1,109 @@
+<?php
+
+/**
+ * Implements hook_node_info().
+ */
+function friend_node_info() {
+  return [
+    'friend' => [
+      'name' => t('Friend'),
+      'base' => 'friend',
+      'description' => t('Friend content type.'),
+      'title_label' => t('Name'),
+      'locked' => TRUE,
+    ],
+  ];
+}
+
+/**
+ * Implements hook_node_type_insert().
+ */
+function friend_node_type_insert($content_type) {
+  if ($content_type->type == 'friend') {
+    foreach (_friend_installed_fields() as $field) {
+      field_create_field($field);
+    }
+
+    // Create all the instances for our fields.
+    foreach (_friend_installed_instances() as $instance) {
+      $instance['entity_type'] = 'node';
+      $instance['bundle']      = 'friend';
+
+      field_create_instance($instance);
+    }
+  }
+}
+
+function _friend_installed_fields() {
+  return [
+		'friend_first_name'	=> [
+			'field_name'  => 'friend_first_name',
+			'type'        => 'text',
+			'cardinality' => 1,
+      'settings'    => [
+        'max_length' => 60,
+			],
+    ],
+		'friend_email'	=> [
+			'field_name'  => 'friend_email',
+			'type'        => 'text',
+			'cardinality' => 1,
+      'settings'    => [
+        'max_length' => 60,
+			],
+    ],
+    'friend_avatar' => [
+      'field_name'  => 'friend_avatar',
+      'type'        => 'image',
+      'cardinality' => 1,
+		],
+    /*'friend_brithday' => [
+      'field_name'  => 'friend_brithday',
+      'type'        => 'date',
+      'cardinality' => 1,
+		],*/
+  ];
+}
+
+function _friend_installed_instances() {
+  return [
+		'friend_first_name'	=> [
+			'field_name' => 'friend_first_name',
+			'label' => t('First name'),
+			'required' => TRUE,
+			'widget' => [
+				'type' => 'text_textfield'
+      ],
+    ],
+		'friend_email' => [
+			'field_name' => 'friend_email',
+			'label' => t('Email address'),
+			'required' => FALSE,
+			'widget' => [
+				'type' => 'text_textfield'
+      ],
+    ],
+    'friend_avatar' => [
+      'field_name'  => 'friend_avatar',
+      'label'       => t('Avatar'),
+      'required'    => FALSE,
+      'widget' => [
+        'type'    => 'image_image',
+        'weight'  => 2.10,
+      ],
+      'display' => [
+        'friend_list' => [
+          'label' => 'hidden',
+          'type' => 'image_link_content__thumbnail',
+        ],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_form().
+ */
+function friend_form($node, $form_state) {
+  return node_content_form($node, $form_state);
+}
