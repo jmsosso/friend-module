@@ -8,7 +8,7 @@ networks:
 
 services:
   drupal:
-    image: drupal:7.58
+    image: servinube/drupal:7.58
     environment:
       VIRTUAL_HOST: friend.test
     volumes:
