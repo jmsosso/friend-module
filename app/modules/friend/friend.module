@@ -52,16 +52,19 @@ function _friend_installed_fields() {
         'max_length' => 60,
 			],
     ],
+    'friend_birthday' => [
+      'field_name'  => 'friend_birthday',
+      'type'        => 'date',
+      'cardinality' => 1,
+      'settings'    => [
+        'granularity' => drupal_map_assoc(['year', 'month', 'day']),
+			],
+		],
     'friend_avatar' => [
       'field_name'  => 'friend_avatar',
       'type'        => 'image',
       'cardinality' => 1,
 		],
-    /*'friend_brithday' => [
-      'field_name'  => 'friend_brithday',
-      'type'        => 'date',
-      'cardinality' => 1,
-		],*/
   ];
 }
 
@@ -81,6 +84,14 @@ function _friend_installed_instances() {
 			'required' => FALSE,
 			'widget' => [
 				'type' => 'text_textfield'
+      ],
+    ],
+		'friend_birthday' => [
+			'field_name' => 'friend_birthday',
+			'label' => t('Birthday'),
+			'required' => TRUE,
+			'widget' => [
+				'type' => 'date_popup',
       ],
     ],
     'friend_avatar' => [
