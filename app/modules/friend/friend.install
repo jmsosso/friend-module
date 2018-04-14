@@ -16,6 +16,9 @@ function friend_uninstall() {
   variable_del('node_options_friend');
   variable_del('comment_friend');
   variable_del('node_submitted_friend');
+  variable_del('friend_last_cron');
+
+  // TODO: Delete existing content
 
 	// To avoid this issue https://www.drupal.org/project/drupal/issues/1565892#comment-10814226
 	node_type_cache_reset();

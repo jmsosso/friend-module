@@ -34,6 +34,33 @@ function friend_node_type_insert($content_type) {
   }
 }
 
+/**
+ * Implements hook_cron().
+ */
+function friend_cron() {
+  $last_run = variable_get('friend_last_cron', 0);
+
+  if (date('Ymd') != date('Ymd', $last_run)) {
+    // New day, lets check birthdays to send emails
+    require_once 'src/BirthdayMailer.php';
+
+    $birthdayMailer = new BirthdayMailer();
+    $birthdayMailer->checkDates();
+
+    variable_set('friend_last_cron', time());
+  }
+}
+
+function friend_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'birthday':
+      require_once 'src/BirthdayMailer.php';
+      $message['subject'] = BirthdayMailer::getEmailSubject();
+      $message['body']    = BirthdayMailer::getEmailBody($params);
+      break;
+  }
+}
+
 function _friend_installed_fields() {
   return [
 		'friend_first_name'	=> [
@@ -58,6 +85,7 @@ function _friend_installed_fields() {
       'cardinality' => 1,
       'settings'    => [
         'granularity' => drupal_map_assoc(['year', 'month', 'day']),
+        'tz_handling' => 'none',
 			],
 		],
     'friend_avatar' => [
@@ -81,7 +109,7 @@ function _friend_installed_instances() {
 		'friend_email' => [
 			'field_name' => 'friend_email',
 			'label' => t('Email address'),
-			'required' => FALSE,
+			'required' => TRUE,
 			'widget' => [
 				'type' => 'text_textfield'
       ],

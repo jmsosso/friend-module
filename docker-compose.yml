@@ -8,13 +8,13 @@ networks:
 
 services:
   drupal:
-    image: servinube/drupal:7.58
+    image: servinube/drupal:7.58-dev
     environment:
       VIRTUAL_HOST: friend.test
     volumes:
       - "./app:/var/www/html/sites/all"
       - "./config/settings.php:/var/www/html/sites/default/settings.php"
-      - "./data/files:/var/www/html/files"
+      - "./data/files:/var/www/html/sites/default/files"
       - "./data/private:/var/www/private"
       - "/etc/localtime:/etc/localtime:ro"
     depends_on:
