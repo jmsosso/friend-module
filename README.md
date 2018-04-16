@@ -48,9 +48,7 @@ Then you can use the following addresses to visit the site:
 To add some dummy content we need to activate the Devel Generate module:
 
 ```
-$ drush dl devel
-$ drush en -y devel_generate
-$ drush generate-content 20 --types=friend
+$ ./exec drush dl devel
+$ ./exec drush en -y devel_generate
+$ ./exec drush generate-content 20 --types=friend
 ```
-
-If you are testing the site with Docker you must run this commands using the `./exec ...` script.

@@ -3,7 +3,7 @@ description = Creates the custom content type Friend.
 version = 1.0
 core = 7.x
 dependencies[] = date
-dependencies[] = date_popup
+dependencies[] = date:date_popup
 
 files[] = friend.install
 files[] = friend.module
