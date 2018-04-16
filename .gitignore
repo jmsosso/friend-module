@@ -1,2 +1,7 @@
 data/database
+data/files
 examples
+drupal-7.58
+app/modules/date
+app/modules/email
+app/modules/devel

@@ -22,6 +22,8 @@ services:
         condition: service_healthy
       mailcatcher:
         condition: service_started
+    ports:
+      - "8080:80"
     networks:
       - proxy
       - internal
@@ -35,6 +37,7 @@ services:
       MYSQL_DATABASE: drupal7
     volumes:
       - "./data/database:/var/lib/mysql"
+      - ./app/dump.sql:/docker-entrypoint-initdb.d/dump.sql
     healthcheck:
       test: "mysqladmin ping -u drupal -pdrupal --silent"
     networks:
@@ -47,6 +50,8 @@ services:
       VIRTUAL_PORT: 8025
     volumes:
       - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "8081:8025"
     networks:
       - proxy
       - internal
@@ -63,6 +68,8 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
+    ports:
+      - "8082:80"
     networks:
       - proxy
       - internal
