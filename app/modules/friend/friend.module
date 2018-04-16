@@ -61,6 +61,34 @@ function friend_mail($key, &$message, $params) {
   }
 }
 
+/**
+ * Implements hook_theme().
+ */
+function friend_theme($existing, $type, $theme, $path) {
+  $theme = [];
+
+  $theme['node__friend'] = [
+    'render element' => 'content',
+    'base hook' => 'node',
+    'template' => 'node--friend',
+    'path' => drupal_get_path('module', 'friend') . '/templates',
+  ];
+
+  return $theme;
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function friend_preprocess_page(&$vars) {
+  if (!empty($vars['node'])) {
+    $node = $vars['node'];
+    if ($node->type == 'friend') {
+      $vars['title'] = 'Friend data';
+    }
+  }
+}
+
 function _friend_installed_fields() {
   return [
 		'friend_first_name'	=> [
