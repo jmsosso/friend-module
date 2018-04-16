@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This projects is just an example of how to create a content type form a custom
+This projects is just an example of how to create a content type from a custom
 Drupal 7 module with some additional features:
 
 The content type will have this fields:
@@ -22,8 +22,8 @@ all the friends, when you select a friend from the autocomplete you will see his
 
 ## Test the module
 
-To run a Drupal 7 instance with this module installed you need Docker and Docker Compose
-installed in your system.
+To run a Drupal 7 site to test this module you need to have Docker and Docker Compose installed in your system.
+Then clone this repo and run the following command inside the project directory:
 
 `docker-compose up -d`
 
