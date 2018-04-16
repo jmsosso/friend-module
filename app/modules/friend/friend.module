@@ -89,6 +89,87 @@ function friend_preprocess_page(&$vars) {
   }
 }
 
+/**
+ * Implements hook_menu().
+ */
+function friend_menu() {
+  return [
+    'search-friends' => [
+      'title' => 'Search for friends',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('search_friends_form'),
+      'access arguments' => ['access content'],
+    ],
+    'api/friend-autocomplete-callback' => [
+      'page callback' => 'friend_autocomplete_callback',
+      'type' => MENU_CALLBACK,
+      'access arguments' => ['access content'],
+    ],
+  ];
+}
+
+function search_friends_form($form, &$form_state) {
+
+  $form['friend'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Type the name of a friend'),
+    '#autocomplete_path' => 'api/friend-autocomplete-callback',
+  );
+
+  $form['actions'] = array(
+    '#type' => 'actions',
+  );
+
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+  );
+
+  return $form;
+}
+
+function search_friends_form_validate($form, &$form_state) {
+  $title   = $form_state['values']['friend'];
+  $matches = [];
+
+  $result = preg_match('/\[([0-9]+)\]$/', $title, $matches);
+  if ($result > 0) {
+    $node = node_load($matches[$result]);
+
+    if (!empty($node)) {
+      $form_state['values']['node'] = $node->nid;
+      return;
+    }
+  }
+
+  form_error($form['friend'], t('Sorry, no friend with name %name can be found', [
+    '%name' => $title,
+  ]));
+}
+
+function search_friends_form_submit($form, &$form_state) {
+  $form_state['redirect'] = 'node/' . $form_state['values']['node'];
+}
+
+function friend_autocomplete_callback($string = "") {
+  $matches = [];
+
+  if ($string) {
+    $result = db_select('node')
+      ->fields('node', array('nid', 'title'))
+      ->condition('type', 'friend')
+      ->condition('title', db_like($string) . '%', 'LIKE')
+      ->range(0, 10)
+      ->execute();
+
+    foreach ($result as $node) {
+      $matches[$node->title . " [$node->nid]"] = check_plain($node->title);
+    }
+  }
+
+  drupal_json_output($matches);
+}
+
 function _friend_installed_fields() {
   return [
 		'friend_first_name'	=> [

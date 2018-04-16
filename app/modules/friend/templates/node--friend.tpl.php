@@ -20,7 +20,7 @@
       hide($content['comments']);
       hide($content['links']);
     ?>
-    <div class="field field-name-friend-first-name field-type-text field-label-above">
+    <div class="field field-name-friend-last-name field-type-text field-label-above">
       <div class="field-label">Last name:&nbsp;</div>
       <div class="field-items">
         <div class="field-item even">
