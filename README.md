@@ -39,7 +39,7 @@ This will also download the dependencies.
 
 Then you can use the following addresses to visit the site:
 
-- Drupal: http://localhost:8080/
+- Drupal: http://localhost:8080/ (user and password: **admin**)
 - phpMyAdmin: http://localhost:8081/
 - Mail Catcher: http://localhost:8082/
 
